@@ -1,0 +1,25 @@
+<component name="libraryTable">
+  <library name="GOPATH &lt;jiazheng&gt;">
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/../../Go/src/9fans.net" />
+      <root url="file://$PROJECT_DIR$/../../Go/src/github.com" />
+    </CLASSES>
+    <SOURCES />
+    <excluded>
+      <root url="file://$PROJECT_DIR$/../../Go/src/github.com/kisielk/errcheck/testdata" />
+      <root url="file://$PROJECT_DIR$/../../Go/src/github.com/golang/lint/testdata" />
+      <root url="file://$PROJECT_DIR$/../../Go/src/github.com/kisielk/errcheck/.git" />
+      <root url="file://$PROJECT_DIR$/../../Go/src/github.com/rogpeppe/godef/.git" />
+      <root url="file://$PROJECT_DIR$/../../Go/src/github.com/nsf/gocode/.git" />
+      <root url="file://$PROJECT_DIR$/../../Go/src/github.com/nsf/gocode/_goremote" />
+      <root url="file://$PROJECT_DIR$" />
+      <root url="file://$PROJECT_DIR$/../../Go/src/github.com/nsf/gocode/_gccgo" />
+      <root url="file://$PROJECT_DIR$/../../Go/src/github.com/golang/lint/.git" />
+      <root url="file://$PROJECT_DIR$/../../Go/src/github.com/nsf/gocode/_testing" />
+      <root url="file://$PROJECT_DIR$/../../Go/src/github.com/jstemmer/gotags/.git" />
+      <root url="file://$PROJECT_DIR$/../../Go/src/github.com/kisielk/gotool/.git" />
+      <root url="file://$PROJECT_DIR$/../../Go/src/9fans.net/go/.git" />
+      <root url="file://$PROJECT_DIR$/../../Go/src/github.com/rogpeppe/godef/go/printer/testdata" />
+    </excluded>
+  </library>
+</component>
