@@ -1,16 +1,18 @@
 package main
 
-import "net/http"
-
-type Person struct  {
-	fname string
-}
-
-func (this *Person) ServeHTTP(w http.ResponseWriter,r *http.Request) {
-	w.Write([]byte("hello:"+this.fname))
-}
+import (
+	"net/http"
+	"log"
+)
 
 func main() {
-	p := &Person{fname:"gavin"}
-	http.ListenAndServe(":8800",p)
+	myMux := http.NewServeMux()
+	myMux.HandleFunc("/",someFunc)
+	http.ListenAndServe(":8800",myMux)
+}
+
+func someFunc(w http.ResponseWriter,r *http.Request) {
+	path := r.URL.Path[0:]
+	log.Println(path)
+	w.Write([]byte("hello"+r.URL.Path[0:]))
 }
