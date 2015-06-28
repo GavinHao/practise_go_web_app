@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"io/ioutil"
 	"strings"
+	"html/template"
 	"log"
 )
 
@@ -15,43 +16,67 @@ func (this *Myhandler) ServeHTTP(w http.ResponseWriter,r *http.Request) {
 	log.Println(paths)
 
 	var filePath string
-	if strings.HasPrefix(paths,"public"){
+	var contentType string
+
+	if strings.HasPrefix(paths,"public"){ //静态资源
 		filePath = paths
+		data,err:=ioutil.ReadFile(filePath)
+		if err == nil {
+			if strings.HasSuffix(paths,".css"){
+				contentType = "text/css"
+			}else if strings.HasSuffix(paths,".js"){
+				contentType = "application/javascript"
+			}else if strings.HasSuffix(paths,".png"){
+				contentType = "image/png"
+			}
+			w.Header().Add("content type",contentType)
+			w.Write(data)
+		} else {
+			w.WriteHeader(404)
+			w.Write([]byte(http.StatusText(404)))
+		}
 	}else{
 		filePath = "template/"+paths
-	}
-	log.Println(filePath)
-	data,err:=ioutil.ReadFile(filePath)
-
-	if err == nil {
-		var contentType string
-		if strings.HasSuffix(paths,".css"){
-			contentType = "text/css"
-		}else if strings.HasSuffix(paths,".js"){
-			contentType = "application/javascript"
-		}else if strings.HasSuffix(paths,".png"){
-			contentType = "image/png"
-		}else if strings.HasSuffix(paths,".html"){
+		if strings.HasSuffix(paths,".html"){
 			contentType = "text/html"
-		/*}else if strings.HasSuffix(paths,""){
-			contentType = "text/css"
-		}else if strings.HasSuffix(paths,".css"){*/
-
-		}else{
-			contentType = "text/plain"
+			tpl,tplErr := template.ParseFiles(filePath)
+			if tplErr==nil {
+				tpl.Execute(w,paths)
+			} else {
+				tpl,tplErr = template.ParseFiles("template/err/404.html")
+				if tplErr==nil {
+					tpl.Execute(w,nil)
+				} else {
+					log.Println(tplErr)
+				}
+			}
+		} else if strings.Index(paths,".") > 0 {
+			contentType = "text/html"
+			tpl,tplErr := template.ParseFiles("template/err/404.html")
+			if tplErr==nil {
+				tpl.Execute(w,nil)
+			} else {
+				log.Println(tplErr)
+			}
+		} else{
+			contentType = "text/html"
+			tpl,tplErr := template.ParseFiles(filePath+".html")
+			if tplErr==nil {
+				tpl.Execute(w,paths)
+			} else {
+				tpl,tplErr = template.ParseFiles("template/err/404.html")
+				if tplErr==nil {
+					tpl.Execute(w,nil)
+				} else {
+					log.Println(tplErr)
+				}
+			}
 		}
-
 		w.Header().Add("content type",contentType)
-		w.Write(data)
-	} else {
-		w.WriteHeader(404)
-		w.Write([]byte("404-Not Found!"+http.StatusText(404)))
 	}
-
 }
 
 func main() {
-
 	http.Handle("/",new(Myhandler))
 	http.ListenAndServe(":8800",nil)
 }
