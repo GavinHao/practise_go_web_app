@@ -1,16 +1,30 @@
 package main
 
-import "net/http"
+import (
+	"net/http"
+	"io/ioutil"
+	"log"
+)
 
-type Person struct  {
-	fname string
+type Myhandler struct  {
 }
 
-func (this *Person) ServeHTTP(w http.ResponseWriter,r *http.Request) {
-	w.Write([]byte("hello:"+this.fname))
+func (this *Myhandler) ServeHTTP(w http.ResponseWriter,r *http.Request) {
+	paths := r.URL.Path[0:]
+	log.Println(paths)
+
+	data,err:=ioutil.ReadFile("template"+paths)
+	if err == nil {
+		w.Write(data)
+	} else {
+		w.WriteHeader(404)
+		w.Write([]byte("404-Not Found!"+http.StatusText(404)))
+	}
+
 }
 
 func main() {
-	p := &Person{fname:"gavin"}
-	http.ListenAndServe(":8800",p)
+
+	http.Handle("/",new(Myhandler))
+	http.ListenAndServe(":8800",nil)
 }
